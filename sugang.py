@@ -4,6 +4,8 @@ import os
 import sys
 import time
 
+# 수강 꾸러미에 담겨져 있을 때 자리가 나면 자동으로 수강신청 해주는 파이선 파일
+
 def enrolment() :
     chromedriver = os.path.abspath('chromedriver.exe')
 
@@ -33,7 +35,7 @@ def enrolment() :
     driver.find_element_by_css_selector('#loginForm > table > tbody > tr:nth-child(4) > td > button.login').click()
     driver.find_element_by_css_selector('#lectPackReqGrid_3 > td.button').click()
 
-def getDataFromACM():
+def getDataFromMyKnu():
     # chromdriver의 위치 지정
     chromedriver = os.path.abspath('chromedriver.exe')
 
@@ -55,8 +57,14 @@ def getDataFromACM():
     driver.implicitly_wait(3)
 
     classCode = driver.find_element_by_css_selector('#search_subj_class_cde')
-    classCode.send_keys('ELEC323006')
+    classCode.send_keys('ELEC323006') # 교과목 코드 입력
+    try:
+        f = open("log.txt", 'r')
+    except Exception:
+        f = open("log.txt", 'w')
 
+    f.close()
+    
     while True:
         driver.find_element_by_css_selector('#contents > div > div > table.search.form > tbody > tr > td > button').click()
 
@@ -72,6 +80,7 @@ def getDataFromACM():
             f.write('꽉 참\n')
         elif(int(total) > int(reqCnt)) :
             enrolment()
+            print(total, reqCnt)
             f.write("사람 빠짐\n")  
             break
         
@@ -84,5 +93,5 @@ def getDataFromACM():
     driver.quit()
 
 if __name__ == '__main__':
-    getDataFromACM()
+    getDataFromMyKnu()
     #print(sys.argv[1])
